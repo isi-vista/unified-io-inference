@@ -14,7 +14,12 @@ logging.basicConfig(level=logging.INFO)
 
 
 def main(data_path: Path, dryrun: bool):
-    f"""Pulls images from urls provided in `visual_genome_python_driver/data/image_data.json.
+    """Pulls images from urls provided in `visual_genome_python_driver/data/image_data.json.
+    
+    Prerequisites:
+    - Cloning the VG python driver (https://github.com/ranjaykrishna/visual_genome_python_driver)
+      and running `getImageData.sh` to download `image_data.json`
+    - Installing the `wget` Python package
     
     Input:
         `data_path`: the path where `image_data.json` is located; this is also where the images will be saved
