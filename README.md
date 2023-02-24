@@ -66,6 +66,17 @@ out = model.run([image], ["What is the depth map of the image ?"],
 depth_image = out["image"][0]
 ```
 
+To run captioning on Visual Genome images:
+1. Clone the [Visual Genome Python Driver repository](https://github.com/ranjaykrishna/visual_genome_python_driver)
+2. Use the scripts in `visual_genome_python_driver/visual_genome/data` to download the
+image data and region descriptions.
+3. Run `scripts/get_vg_images.py` to download the VG images using the image data.
+4. Run the captioning script:
+    ```bash
+    python ./caption_vg.py $MODEL_SIZE $MODEL_PATH $VG_DATA_PATH $OUTPUT_FILE $SAMPLE_SIZE \
+      (--prompts $ALTERNATIVE_PROMPTS_FILE)
+    ```
+
 ## Demo notebook
 More tasks are shown in demo.ipynb, this requires additionally install jupyter and matplotlib:
 
