@@ -1,17 +1,13 @@
 import argparse
-import io
 import json
 import os
 from collections import defaultdict
-from os.path import exists
 from typing import List, Dict
 
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image
 from uio import runner
 from uio.configs import CONFIGS
-from uio import utils
 import numpy as np
-import spacy
 from absl import logging
 import warnings
 from itertools import islice
