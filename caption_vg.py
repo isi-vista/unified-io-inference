@@ -6,6 +6,7 @@ from typing import List, Dict
 
 from PIL import Image
 from uio import runner
+from uio.runner import CAPTIONING_PROMPT
 from uio.configs import CONFIGS
 import numpy as np
 from absl import logging
@@ -81,16 +82,15 @@ def main():
       )
 
   logging.info(f"Captioning images from {vg_data_path}...")
-  caption_prompt = "What does the image describe ?"
   for sample_image_file in islice(vg_images_path.iterdir(), 0, int(args.sample_count)):
     if sample_image_file.suffix == ".jpg":
       image_id = sample_image_file.stem
       image_descriptions = " ".join(image_ids_to_captions[image_id])
       with Image.open(sample_image_file) as img:
         image = np.array(img.convert('RGB'))
-      primary_output = model.vqa(image, caption_prompt)
-      all_output = {caption_prompt: primary_output}
-      logging.info(f"\n{image_id}\n{caption_prompt}\n{image_descriptions}\n{primary_output['text']}\n")
+      primary_output = model.vqa(image, CAPTIONING_PROMPT)
+      all_output = {CAPTIONING_PROMPT: primary_output}
+      logging.info(f"\n{image_id}\n{CAPTIONING_PROMPT}\n{image_descriptions}\n{primary_output['text']}\n")
       for alt_prompt in prompts_list:
         formatted_prompt = alt_prompt.strip('\n')
         output = model.vqa(image, formatted_prompt)
