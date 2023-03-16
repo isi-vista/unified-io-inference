@@ -17,9 +17,21 @@ docker run -it --gpus=1 -e WEBDATASET_FILE=/input/00000.tar -v /nas/gaia02/data/
 
 To run vizwiz:
 ```bash
-docker run -it --gpus=1 -v /nas/gaia02/data/paper2023/vizwiz/data/images/train:/images \
+docker run -it --gpus=1 -v /nas/gaia02/data/paper2023/vizwiz/data/images/val:/images \
  -v ${OUTPUT}:/output \
  -v /nas/gaia02/data/paper2023/vizwiz/data/annotations:/input \
- -e VIZWIZ_FILE=/input/train.json \
+ -e VIZWIZ_FILE=/input/val.json \
  unified-io-inference:vizwiz
+```
+
+To run VizWiz scoring (work in progress)
+```bash
+docker run -it --gpus=1 -v /nas/gaia02/data/paper2023/vizwiz/data/images/val:/images \
+ -v ${OUTPUT}:/output \
+ -v /nas/gaia02/data/paper2023/vizwiz/data/annotations:/input \
+ -e VIZWIZ_FILE=/input/val.json \
+ --entrypoint /bin/bash unified-io-inference:vizwiz
+...
+# export PYTHONPATH="/root/vizwiz/vizwiz-caption"
+# bash -c ". activate vizwiz && python ./eval-vizwiz.py"
 ```

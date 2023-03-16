@@ -6,8 +6,10 @@ import numpy as np
 import json
 from json import encoder
 encoder.FLOAT_REPR = lambda o: format(o, '.3f')
-annFile = '/input/train.json'
-resFile = '/output/vizwiz-train100-captions.json'
+#annFile = '/input/train.json'
+annFile = '/input/val.json'
+#resFile = '/output/vizwiz-train100-captions.json'
+resFile = '/output/vizwiz-val500-captions.json'
 vizwiz = VizWiz(annFile, ignore_rejected=True, ignore_precanned=True)
 vizwizRes = vizwiz.loadRes(resFile)
 vizwizEval = VizWizEvalCap(vizwiz, vizwizRes)
