@@ -15,12 +15,14 @@ To run captioning of the CC12M dataset using Unified-IO:
 docker run -it --gpus=1 -e WEBDATASET_FILE=/input/00000.tar -v /nas/gaia02/data/paper2023/cc12m/images:/input -v /nas/gaia02/users/napiersk/github/feb-14/unified-io-inference/output:/output -e SAMPLE_COUNT=500 unified-io-inference
 ```
 
-To run vizwiz:
+To run vizwiz (train|val|test):
 ```bash
-docker run -it --gpus=1 -v /nas/gaia02/data/paper2023/vizwiz/data/images/val:/images \
+export DATA=test
+docker run -it --gpus 4 \
+ -v /nas/gaia02/data/paper2023/vizwiz/data/images/${DATA}:/images \
  -v ${OUTPUT}:/output \
  -v /nas/gaia02/data/paper2023/vizwiz/data/annotations:/input \
- -e VIZWIZ_FILE=/input/val.json \
+ -e VIZWIZ_FILE=/input/${DATA}.json \
  unified-io-inference:vizwiz
 ```
 
