@@ -60,8 +60,9 @@ WORKDIR /root/vizwiz/vizwiz-caption
 WORKDIR /root
 
 COPY . .
-RUN bash -c ". activate uioi && export PYTHONPATH=/root:/root/uio && python ./uio/test/check.py"
+ENV PYTHONPATH=/root:/root/uio:/root/vizwiz/vizwiz-caption
+RUN bash -c ". activate uioi && python ./uio/test/check.py"
 ENV OUTPUT_FILE=/output/vizwiz-captions.json
 ENV IMAGE_DIR=/images
 ENV SAMPLE_COUNT=5
-ENTRYPOINT bash -c ". activate uioi && python ./caption-vizwiz.py xl xl.bin $VIZWIZ_FILE $IMAGE_DIR $OUTPUT_FILE $SAMPLE_COUNT"
+ENTRYPOINT bash -c ". activate uioi && touch $OUTPUT_FILE && python ./caption-vizwiz.py xl xl.bin $VIZWIZ_FILE $IMAGE_DIR $OUTPUT_FILE $SAMPLE_COUNT && . deactivate && . activate vizwiz && python ./eval-vizwiz.py ${VIZWIZ_FILE} ${OUTPUT_FILE}"
