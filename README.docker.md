@@ -1,21 +1,42 @@
 
 ## Docker
-To build a docker image:
+
+### Build
+To build a docker image (default image processes CC12M dataset):
 ```bash
 docker build -t unified-io-inference .
 ```
 
-To build using named Dockerfile:
+To build using named Dockerfile (such as for VizWiz custom Dockerfile):
 ```bash
 docker build -t unified-io-inference:vizwiz -f VizWiz.Dockerfile .
 ```
 
-To run captioning of the CC12M dataset using Unified-IO:
+### Run
+Caption CC12M:
 ```bash
-docker run -it --gpus=1 -e WEBDATASET_FILE=/input/00000.tar -v /nas/gaia02/data/paper2023/cc12m/images:/input -v /nas/gaia02/users/napiersk/github/feb-14/unified-io-inference/output:/output -e SAMPLE_COUNT=500 unified-io-inference
+export HOST_INPUT_DIR=/nas/gaia02/data/paper2023/cc12m/images
+export HOST_OUTPUT_DIR=/someoutputpathonthehost
+docker run -it --gpus=1 \
+-e WEBDATASET_FILE=/input/00000.tar \
+-v ${HOST_INPUT_DIR}:/input \
+-v ${HOST_OUTPUT_DIR}:/output \
+-e SAMPLE_COUNT=500 unified-io-inference
 ```
 
-To run vizwiz (train|val|test):
+Split VizWiz dataset into batches:
+```bash
+docker run -it --gpus "device=0" \
+ -v ${INPUT}:/input:ro \
+ -v ${OUTPUT}:/output \
+ --entrypoint /bin/bash unified-io-inference:vizwiz
+...
+# export PYTHONPATH="/root/vizwiz/vizwiz-caption"
+# bash -c ". activate vizwiz && python ./splitter.py"
+```
+
+Caption VizWiz (train|val|test):
+TODO: specify device id for each batch.
 ```bash
 export DATA=test
 export BATCH=_0
@@ -28,19 +49,7 @@ docker run -it --gpus "device=" \
  unified-io-inference:vizwiz
 ```
 
-To run VizWiz scoring (work in progress)
-```bash
-docker run -it --gpus=1 -v /nas/gaia02/data/paper2023/vizwiz/data/images/val:/images \
- -v ${OUTPUT}:/output \
- -v /nas/gaia02/data/paper2023/vizwiz/data/annotations:/input \
- -e VIZWIZ_FILE=/input/val.json \
- --entrypoint /bin/bash unified-io-inference:vizwiz
-...
-# export PYTHONPATH="/root/vizwiz/vizwiz-caption"
-# bash -c ". activate vizwiz && python ./eval-vizwiz.py"
-```
-
-To run joiner (wip)
+Join VizWiz results
 ```bash
 docker run -it --gpus "device=0" \
  -v ${BATCHES}:/batches:ro \
