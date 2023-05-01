@@ -10,9 +10,26 @@ docker build -t unified-io-inference .
 To build using named Dockerfile (such as for VizWiz custom Dockerfile):
 ```bash
 docker build -t unified-io-inference:vizwiz -f VizWiz.Dockerfile .
+docker build -t unified-io-inference:alt-prompts -f Alt_Prompts_Dockerfile .
 ```
 
 ### Run
+Alternate Prompts:
+```bash
+export IMAGE_DIR=/nas/gaia02/users/napiersk/data/LDC2021E11_AIDA_Phase_3_Practice_Topic_Source_Data_V2.0/data/jpg/jpg
+export OUTPUT_DIR=/nas/gaia02/users/napiersk/github/april19/unified-io-inference/output/alt-prompts
+export SAMPLE_COUNT=10
+export PROMPTS_FILE=/images/alternative_prompts.json
+docker run -it --gpus="device=0" \
+-e IMAGE_DIR=/images \
+-e OUTPUT_DIR=/output \
+-e SAMPLE_COUNT=$SAMPLE_COUNT \
+-e PROMPTS_FILE=$PROMPTS_FILE \
+-v ${IMAGE_DIR}:/images:ro \
+-v ${OUTPUT_DIR}:/output \
+unified-io-inference:alt-prompts
+```
+
 Caption CC12M:
 ```bash
 export HOST_INPUT_DIR=/nas/gaia02/data/paper2023/cc12m/images
