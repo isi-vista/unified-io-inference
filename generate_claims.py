@@ -11,6 +11,12 @@ from typing import List, Dict
 from pathlib import Path
 
 def main():
+#  with open("/nas/gaia02/users/napiersk/github/may01/unified-io-inference/claims_shortened.json") as claim_file:
+#    parsed_claims = json.load(claim_file)
+#  with open("out_claims.json", 'w') as f:
+#    json.dump(parsed_claims, f, indent=2, sort_keys=True)
+#    exit()
+#  exit()
 #  with open("/nas/gaia02/users/napiersk/github/may01/unified-io-inference/single_claim.json") as claim_file:
 #    parsed_claims = json.load(claim_file)
 #    print(f"Claims keys: {parsed_claims.keys()}")
@@ -54,13 +60,70 @@ def main():
       for line in f:
         if line.count('\t') == 2:
           image_path, question, answer = line.split('\t')
-#          print(f"{image_path}{question}{answer}")
-          claim = {"sentence":str(answer).strip(), \
-                   "source":image_path, \
-                   "claim_id":f"{len(claims):08}"}
-          claims.append(claim)
-        else:
-          print(f"IGNORED line: {line}")
+          image_stem = Path(image_path).stem
+          answer = answer.lower().strip()
+          if answer.find('virus') >= 0 or answer.find('mask') >= 0:
+            claims.append({"sentence":str(answer).strip(), \
+              "associated_KEs": [], \
+              "claim_id": f"claim_{image_stem}_{len(claims)}", \
+              "claim_semantics": [], \
+              "claim_span_end": 0, \
+              "claim_span_start": 0, \
+              "claim_span_text": answer, \
+              "claimbuster_score": 0.0, \
+              "claimer_affiliation": "", \
+              "claimer_affiliation_identity_qnode": "", \
+              "claimer_affiliation_type_qnode": "", \
+              "claimer_debug": "", \
+              "claimer_end": 2762, \
+              "claimer_ke": [], \
+              "claimer_ke_qnode": [], \
+              "claimer_ke_typeqnode": [], \
+              "claimer_qnode": "", \
+              "claimer_score": 0.0, \
+              "claimer_search_key": "", \
+              "claimer_start": 0, \
+              "claimer_text": "", \
+              "claimer_type_qnode": "", \
+              "end_char": 0, \
+              "entity": "PER.Professional.Scientist", \
+              "equivalent_claims": [], \
+              "equivalent_claims_text": "", \
+              "final_claim_score": 0.0, \
+              "generation": "GAIA Unified-IO-Inference", \
+              "lan": "EN", \
+              "location": "Indoors", \
+              "news_author": "", \
+              "news_url": "", \
+              "qnode_x_variable_identity": "", \
+              "qnode_x_variable_type": "", \
+              "refuting_claims": [], \
+              "refuting_claims_text": "", \
+              "render_text": [], \
+              "segment_id": "", \
+              "sentence": answer, \
+              "sentence_L": "\"", \
+              "sentence_M": answer, \
+              "sentence_R": ".\"", \
+              "source": image_stem, \
+              "stance": "Affirm", \
+              "start_char": 0, \
+              "sub_topic": "Who can contract COVID-19", \
+              "supporting_claims": [], \
+              "supporting_claims_text": "", \
+              "template": question, \
+              "time_attr": "", \
+              "time_end_earliest": "", \
+              "time_start_earliest": "", \
+              "time_start_latest": "", \
+              "topic": "Contracting the virus", \
+              "topic_score": 0.0, \
+              "x_end": 0, \
+              "x_ke": [], \
+              "x_ke_qnode": [], \
+              "x_ke_typeqnode": [], \
+              "x_start": 0, \
+              "x_variable": ""})
 
   with open(output_file, 'w') as f:
     container = {"claims":claims}
