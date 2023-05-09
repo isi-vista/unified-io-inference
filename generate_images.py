@@ -2,6 +2,7 @@
 # Prompt unified-io-inference for image labels
 # Usage: (activate virtual env, e.g. ". activate uioi &&"
 # python ./generate_images.py xl sl.bin $PROMPTS_FILE $OUTPUT_DIR
+import matplotlib.pyplot as plt
 import argparse
 import io
 import json
@@ -42,7 +43,7 @@ def main():
   logging.info(f"prompts_data: {prompts_data}")
 
   #TODO: read through prompts.  only generate single fixed image currently
-  generated = model.image_generation("all red everywhere", num_decodes=1)
+  generated = model.image_generation("red and white stripes", num_decodes=1)
   print(f"Keys: {generated.keys()}")
   g_score = generated["score"]
   print(f"SCORE: {g_score}")
@@ -50,18 +51,13 @@ def main():
   print(f"Type: {type(g_image)}")
   print(f"Shape: {g_image.shape}")
   print(f"dtype: {g_image.dtype}")
-# demo uses matplotlib imshow
-# shape is [256, 256, 3], believed to be RGB
-## tried HSV, LAB, YCbCr
-  arr_img = Image.fromarray(g_image, mode="RGB")
-  print(f"{list(arr_img.getdata(band=0))}")
 
-  img = arr_img.convert("CMYK")
-  img.save(f"{args.output_dir}/generated_image.jpg", "JPEG")
+  fig, ax = plt.subplots()
+  ax.set_xticklabels([])
+  ax.set_yticklabels([])    
+  ax.imshow(g_image)
+  plt.savefig(f"{args.output_dir}/generated_image.png")
   exit()
-
-#      with Image.open(image_path) as img:
-#        image = np.array(img.convert('RGB'))
 
 if __name__ == "__main__":
   main()
