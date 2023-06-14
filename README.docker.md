@@ -11,6 +11,7 @@ To build using named Dockerfile (such as for VizWiz custom Dockerfile):
 ```bash
 docker build -t unified-io-inference:vizwiz -f VizWiz.Dockerfile .
 docker build -t unified-io-inference:alt-prompts -f Alt_Prompts_Dockerfile .
+docker build -t unified-io-inference:image-generation -f Image_Generation_Dockerfile .
 ```
 
 ### Run
@@ -74,4 +75,16 @@ docker run -it --gpus "device=0" \
  --entrypoint /bin/bash unified-io-inference:vizwiz
 ...
 # bash -c ". activate uioi && python ./joiner.py /batches/batch.json /output"
+```
+
+Image Generation
+```
+export OUTPUT_DIR=$(pwd)/output-20230508
+export PROMPTS_FILE=prompts.json
+docker run -it --gpus "device=0" \
+ -v $(pwd):/input:ro \
+ -v ${OUTPUT_DIR}:/output \
+ -e PROMPTS_FILE=/input/${PROMPTS_FILE} \
+ -e OUTPUT_DIR=/output \
+ unified-io-inference:image-generation
 ```
