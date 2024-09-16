@@ -40,7 +40,7 @@ ENV SAMPLE_COUNT=1
 ENV PROMPTS_FILE=./alternative_prompts.txt
 
 # CC12M
-ENTRYPOINT bash -c ". activate uioi && python ./caption.py xl xl.bin $WEBDATASET_FILE $OUTPUT_FILE $SAMPLE_COUNT"
+# ENTRYPOINT bash -c ". activate uioi && python ./caption.py xl xl.bin $WEBDATASET_FILE $OUTPUT_FILE $SAMPLE_COUNT"
 
 # VG with alternative prompts
-# ENTRYPOINT bash -c ". activate uioi && python ./caption_vg.py xl xl.bin $VG_DATA_DIR $OUTPUT_FILE $SAMPLE_COUNT --prompts $PROMPTS_FILE"
+ENTRYPOINT bash -c ". activate uioi && python ./caption_vg.py xl xl.bin $VG_DATA_DIR $OUTPUT_FILE"
