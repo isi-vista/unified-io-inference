@@ -14,7 +14,18 @@ def process_imagenet_classes(classes_file: Path):
 
 	return {'classes': classes_list}
 
-PREPROCESS_FUNCTIONS = {'imagenet': process_imagenet_classes}
+def process_objectnet_classes(classes_file: Path):
+	with classes_file.open('r') as fp:
+		class_name_mappings = json.load(fp)
+	
+	classes_list = [class_name for class_name in class_name_mappings.values()] 
+
+	return {'classes': classes_list}
+
+PREPROCESS_FUNCTIONS = {
+	'imagenet': process_imagenet_classes,
+	'objectnet':process_objectnet_classes
+}
 
 def main():
 	parser = ArgumentParser(__doc__)
